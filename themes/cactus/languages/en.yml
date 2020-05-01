@@ -1,10 +1,10 @@
 nav:
   home: Home
   about: About
-  articles: Blog Posts
+  articles: Work
   tag: Tag
   category: Category
-  projects: Projects
+  projects: Github
   search: Search
 
 footer:
@@ -14,8 +14,8 @@ index:
   find_me_on: Find me on
   enum_comma: ','
   enum_and: and
-  articles: Blog Posts
-  projects: Projects
+  articles: Work
+  projects: Github
   topics: Topics
   most_recent: Most recent
 

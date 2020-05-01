@@ -27,7 +27,7 @@ If the item type is a 2D segment, the package provides a few classes to reorient
 ![](/images/angle_reg.png)
 ![](/images/ordinate_reg.png)
 
-### Usage Example:
+### Usage Example
 ``` C++
 #include <CGAL/Simple_cartesian.h>
 #include <CGAL/Shape_regularization.h>
@@ -77,10 +77,3 @@ Concepts used: [Object-Oriented Design](https://en.wikipedia.org/wiki/Object-ori
 
 ### Links for Further Reading
 Feel free to take a look at my [code](https://github.com/CGAL/cgal-public-dev/tree/gsoc2019-Shape_regularization-sytov/Shape_regularization), [GSoC2019 proposal](https://summerofcode.withgoogle.com/archive/2019/projects/6276807777583104/), [final submission and commit history](https://github.com/CGAL/cgal/issues/4170), [final report](https://docs.google.com/document/d/17Wvyb1ZiP8J-myLg9d0d7_X83xvxLeOOG13WVJyYwNM/edit) and the [documentation](https://cgal.geometryfactory.com/~danston/Shape_regularization/index.html).
-
-
-<!-- Test:
-<div class="table">
-    <img src="/images/Seneca_blue_300.png" style="float: left;" width="35%"> 
-    <img src="/images/Seneca_blue_300.png" style="float: left;" width="35%">
-</div> -->
