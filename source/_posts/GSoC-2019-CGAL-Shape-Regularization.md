@@ -15,14 +15,14 @@ The algorithm works as follows:
 
 1. Computes neighbors of each item in the data set;
 2. Computes objective function values among these neighbors;
-3. Solves the quadratic programming problem utilizing the [OSQP](https://osqp.org/docs/) solver;
+3. Solves the quadratic programming problem utilizing the [Operator Splitting Quadratic Program (OSQP)](https://osqp.org/docs/) solver;
 4. Sorts items into groups based on the regularized objective function values;
 5. Updates items within each regularized group.
 
 If the item type is a 2D segment, the package provides a few classes to reorient and realign them:
-* Delaunay neighbor query – finds the neighbors of each segment by constructing a Delaunay triangulation using the CGAL::Delaunay_triangulation_2 class
-* Angle regularization – re-orients segments to preserve parallelism and orthogonality.
-* Ordinate regularization – re-aligns segments to preserve collinearity.
+* [Delaunay Neighbor Query](https://cgal.geometryfactory.com/~danston/Shape_regularization/index.html#QP_Regularization_Segments_Delaunay) – finds the neighbors of each segment by constructing a [Delaunay triangulation](https://en.wikipedia.org/wiki/Delaunay_triangulation) using the [CGAL::Delaunay_triangulation_2](https://doc.cgal.org/latest/Triangulation_2/index.html#title11) class
+* [Angle Regularization](https://cgal.geometryfactory.com/~danston/Shape_regularization/index.html#QP_Regularization_Segments_Angles) – re-orients segments to preserve parallelism and orthogonality.
+* [Ordinate regularization](https://cgal.geometryfactory.com/~danston/Shape_regularization/index.html#QP_Regularization_Segments_Offset) – re-aligns segments to preserve collinearity.
 
 ![](/images/angle_reg.png)
 ![](/images/ordinate_reg.png)
