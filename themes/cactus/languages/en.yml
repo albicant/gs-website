@@ -6,6 +6,7 @@ nav:
   category: Category
   projects: Github
   search: Search
+  resume: Resume
 
 footer:
   copyright: Copyright
@@ -18,6 +19,7 @@ index:
   projects: Github
   topics: Topics
   most_recent: Most recent
+  resume: Resume
 
 post:
   desktop:
