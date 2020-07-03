@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="BackgroundDuring my Winter 2020 term at Portland State University, I completed the CS485: Cryptography elective with Dr. Sarah Mocas. During this course, I had a chance to gain hands-on expirience imp">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Implementing a Feistel cipher with Python">
+<meta property="og:url" content="sytov.net/2020/03/21/Implementing-a-Feistel-cipher-with-Python/index.html">
+<meta property="og:site_name" content="G.V. Sytov">
+<meta property="og:description" content="BackgroundDuring my Winter 2020 term at Portland State University, I completed the CS485: Cryptography elective with Dr. Sarah Mocas. During this course, I had a chance to gain hands-on expirience imp">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-03-22T00:26:01.000Z">
+<meta property="article:modified_time" content="2020-05-18T05:35:04.479Z">
+<meta property="article:author" content="G.V. Sytov">
+<meta property="article:tag" content="Gennadii Sytov">
+<meta property="article:tag" content=" Gennady Sytov">
+<meta property="article:tag" content=" G.V. Sytov">
+<meta property="article:tag" content=" Sytov">
+<meta name="twitter:card" content="summary">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/Seneca_blue_192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/Seneca_blue_180.png">
+          
+        
+    
+    <!-- title -->
+    <title>Implementing a Feistel cipher with Python</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Work</a></li>
+         
+          <li><a href="https://github.com/albicant" target="_blank" rel="noopener">Github</a></li>
+         
+          <li><a href="/gvs_resume.pdf">Resume</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" href="/2019/12/12/Capstone-Perception-CEA-608-Closed-Captioning-Encoder/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=sytov.net/2020/03/21/Implementing-a-Feistel-cipher-with-Python/" target="_blank" rel="noopener"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=sytov.net/2020/03/21/Implementing-a-Feistel-cipher-with-Python/&text=Implementing a Feistel cipher with Python" target="_blank" rel="noopener"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=sytov.net/2020/03/21/Implementing-a-Feistel-cipher-with-Python/&title=Implementing a Feistel cipher with Python" target="_blank" rel="noopener"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=sytov.net/2020/03/21/Implementing-a-Feistel-cipher-with-Python/&is_video=false&description=Implementing a Feistel cipher with Python" target="_blank" rel="noopener"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Implementing a Feistel cipher with Python&body=Check out this article: sytov.net/2020/03/21/Implementing-a-Feistel-cipher-with-Python/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=sytov.net/2020/03/21/Implementing-a-Feistel-cipher-with-Python/&title=Implementing a Feistel cipher with Python" target="_blank" rel="noopener"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=sytov.net/2020/03/21/Implementing-a-Feistel-cipher-with-Python/&title=Implementing a Feistel cipher with Python" target="_blank" rel="noopener"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=sytov.net/2020/03/21/Implementing-a-Feistel-cipher-with-Python/&title=Implementing a Feistel cipher with Python" target="_blank" rel="noopener"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=sytov.net/2020/03/21/Implementing-a-Feistel-cipher-with-Python/&title=Implementing a Feistel cipher with Python" target="_blank" rel="noopener"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=sytov.net/2020/03/21/Implementing-a-Feistel-cipher-with-Python/&name=Implementing a Feistel cipher with Python&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=sytov.net/2020/03/21/Implementing-a-Feistel-cipher-with-Python/&t=Implementing a Feistel cipher with Python" target="_blank" rel="noopener"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Background"><span class="toc-number">1.</span> <span class="toc-text">Background</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Implementation"><span class="toc-number">2.</span> <span class="toc-text">Implementation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Step-1-Key-generation"><span class="toc-number">3.</span> <span class="toc-text">Step 1: Key generation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Step-2-Encryption"><span class="toc-number">4.</span> <span class="toc-text">Step 2: Encryption</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Step-3-Decryption"><span class="toc-number">5.</span> <span class="toc-text">Step 3: Decryption</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Further-Reading"><span class="toc-number">6.</span> <span class="toc-text">Further Reading</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Implementing a Feistel cipher with Python
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">G.V. Sytov</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2020-03-22T00:26:01.000Z" itemprop="datePublished">2020-03-21</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h3 id="Background"><a href="#Background" class="headerlink" title="Background"></a>Background</h3><p>During my Winter 2020 term at <a href="https://www.pdx.edu/cecs/home" target="_blank" rel="noopener">Portland State University</a>, I completed the <a href="https://www.pdx.edu/computer-science/cs485" target="_blank" rel="noopener">CS485: Cryptography</a> elective with <a href="http://web.cecs.pdx.edu/~sarah/" target="_blank" rel="noopener">Dr. Sarah Mocas</a>. During this course, I had a chance to gain hands-on expirience implementing two cryptographic algorithms: a <a href="https://en.wikipedia.org/wiki/Feistel_cipher" target="_blank" rel="noopener">Feistel cipher</a> and the <a href="https://en.wikipedia.org/wiki/ElGamal_encryption" target="_blank" rel="noopener">ElGamal encryption</a> algorithm. In this post, I would like to share the details of my implementation of a Feistel cipher using a 64 bit block size and a 64 bit key using <a href="https://www.python.org/" target="_blank" rel="noopener">Python 3</a>.</p>
+<h3 id="Implementation"><a href="#Implementation" class="headerlink" title="Implementation"></a>Implementation</h3><p>I chose Python because of its native support of large numbers, as well as very easy conversion between decimal and hexidecimal numbers. Officiency of the implementation was not an issue due to it being only an educational project to help students gain better understanding of cryptography.</p>
+<p>The cipher consist of 3 major steps:</p>
+<h3 id="Step-1-Key-generation"><a href="#Step-1-Key-generation" class="headerlink" title="Step 1: Key generation"></a>Step 1: Key generation</h3><p>The key generation algorithm works as follows:</p>
+<ul>
+<li>Uses the 64 bit secret key <strong>K</strong> (8 bytes)</li>
+<li>Left rotates <strong>K</strong> by 1 bit 192 times (64 * 3)</li>
+<li>Creates 16 new keys of consisting of 12 bytes</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">shiftBitLeft</span><span class="params">(self, block)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> block &gt;= self.constant_64bit:</span><br><span class="line">        block -= self.constant_64bit</span><br><span class="line">        block = block &lt;&lt; <span class="number">1</span></span><br><span class="line">        block += <span class="number">1</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        block = block &lt;&lt; <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> block</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">createKeyArray</span><span class="params">(self, block)</span>:</span></span><br><span class="line">    key_array = []</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>, <span class="number">64</span>):</span><br><span class="line">        block = self.shiftBitLeft(block)</span><br><span class="line">        key_array.append(block)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> key_array</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">generateKeys</span><span class="params">(self, key)</span>:</span></span><br><span class="line">    row_keys = self.createKeyArray(key)</span><br><span class="line">    keys = []</span><br><span class="line">    counter = <span class="number">-1</span></span><br><span class="line">    x = <span class="number">0</span></span><br><span class="line">    <span class="keyword">while</span>(x &lt; <span class="number">192</span> <span class="keyword">and</span> counter &lt; <span class="number">16</span>):</span><br><span class="line">        i = x % <span class="number">64</span></span><br><span class="line">        byte_arr = self.breakHexIntoChunks(row_keys[i])</span><br><span class="line">        <span class="keyword">if</span>(x % <span class="number">12</span> == <span class="number">0</span>):</span><br><span class="line">            keys.append([])</span><br><span class="line">            counter += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">        b = x % <span class="number">4</span></span><br><span class="line">        <span class="keyword">if</span> counter % <span class="number">2</span> == <span class="number">1</span>:</span><br><span class="line">            b += <span class="number">4</span></span><br><span class="line">        keys[counter].append(int(byte_arr[b], <span class="number">16</span>))</span><br><span class="line">        x += <span class="number">1</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> keys</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="Step-2-Encryption"><a href="#Step-2-Encryption" class="headerlink" title="Step 2: Encryption"></a>Step 2: Encryption</h3><ul>
+<li>Input whitening step: <ul>
+<li>The input is the 64-bit block divided into 4 words <strong>w<sub>0</sub>, w<sub>1</sub>, w<sub>2</sub>, w<sub>3</sub></strong>.  </li>
+<li>XOR each word with 16 bits of the key <strong>K = K<sub>0</sub>K<sub>1</sub>K<sub>2</sub>K<sub>3</sub></strong>.  </li>
+<li>The output is     <ul>
+<li><strong>R<sub>0</sub> = w<sub>0</sub> ⊕ K<sub>0</sub>, R<sub>01</sub> = w<sub>1</sub> ⊕ K<sub>1</sub>,</strong></li>
+<li><strong>R<sub>2</sub> = w<sub>2</sub> ⊕ K<sub>2</sub>, R<sub>3</sub> = w<sub>3</sub> ⊕ K<sub>3</sub>.</strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Set the round number to <strong>round=0</strong>. After each of the 16 rounds increment <strong>round</strong> by one.</li>
+<li>Compute <strong>F(R<sub>0</sub>, R<sub>1</sub>, round)</strong>. This function returns two values <strong>F<sub>0</sub></strong> and <strong>F<sub>1</sub></strong>.  <ul>
+<li>Compute <strong>R<sub>2</sub> ⊕ F<sub>0</sub></strong>. This value is <strong>R<sub>0</sub></strong> for the next round.  </li>
+<li>Compute <strong>R<sub>3</sub> ⊕ F<sub>1</sub></strong>. This value is <strong>R<sub>1</sub></strong> for the next round.   </li>
+<li>The value <strong>R<sub>0</sub></strong> becomes <strong>R<sub>2</sub></strong> for the next round. </li>
+<li>The value <strong>R<sub>1</sub></strong> becomes <strong>R<sub>3</sub></strong> for the next round.</li>
+<li>Repeat for 16 rounds (but not the whitening step this only happens at the start of the first round).  </li>
+</ul>
+</li>
+<li>After the last of the 16 rounds: <ul>
+<li>Undo the last swap by setting<br><strong>y<sub>0</sub></strong> to <strong>R<sub>2</sub></strong> from the end of the 16th round;<br><strong>y<sub>1</sub></strong> to <strong>R<sub>3</sub></strong> from the end of the 16th round;<br><strong>y<sub>2</sub></strong> to <strong>R<sub>0</sub></strong> from the end of the 16th round and<br><strong>y<sub>3</sub></strong> to <strong>R<sub>1</sub></strong> from the end of the 16th round.</li>
+</ul>
+</li>
+<li>Output whitening step: <ul>
+<li>XOR each word with 16 bits of the key <strong>K = K<sub>0</sub>K<sub>1</sub>K<sub>2</sub>K<sub>3</sub></strong>.<br>The input is <strong>y<sub>0</sub>y<sub>1</sub>y<sub>2</sub>y<sub>3</sub></strong>. The output is     </li>
+<li><strong>C<sub>0</sub> = y<sub>0</sub> ⊕ K<sub>0</sub>, C<sub>01</sub> = y<sub>1</sub> ⊕ K<sub>1</sub>,</strong></li>
+<li><strong>C<sub>2</sub> = y<sub>2</sub> ⊕ K<sub>2</sub>, C<sub>3</sub> = y<sub>3</sub> ⊕ K<sub>3</sub>.</strong><br>The value <strong>C<sub>0</sub>C<sub>1</sub>C<sub>2</sub>C<sub>3</sub></strong> is the ciphertext.</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">whitening</span><span class="params">(self, word, key)</span>:</span></span><br><span class="line">        r = []</span><br><span class="line"></span><br><span class="line">        key = format(key, <span class="string">"016x"</span>)</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>, <span class="number">4</span>):</span><br><span class="line">            j = i * <span class="number">4</span></span><br><span class="line"></span><br><span class="line">            sw = word[j: j + <span class="number">4</span>]</span><br><span class="line">            sk = key[<span class="number">4</span> * i:<span class="number">4</span> * i + <span class="number">4</span>]</span><br><span class="line">            w = int(sw, <span class="number">16</span>) ^ int(sk, <span class="number">16</span>)</span><br><span class="line">            r.append(w)</span><br><span class="line">        <span class="keyword">return</span> r</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">g_function</span><span class="params">(self, r, k0, k1, k2, k3)</span>:</span></span><br><span class="line">        r = format(r, <span class="string">'04x'</span>)</span><br><span class="line">        g1 = int(r[:<span class="number">2</span>], <span class="number">16</span>)</span><br><span class="line">        g2 = int(r[<span class="number">2</span>:<span class="number">4</span>], <span class="number">16</span>)</span><br><span class="line">        g3 = int(self.ftable[g2 ^ k0]) ^ g1</span><br><span class="line">        g4 = int(self.ftable[g3 ^ k1]) ^ g2</span><br><span class="line">        g5 = int(self.ftable[g4 ^ k2]) ^ g3</span><br><span class="line">        g6 = int(self.ftable[g5 ^ k3]) ^ g4</span><br><span class="line">        <span class="keyword">return</span> int(format(g5, <span class="string">'02x'</span>) + format(g6, <span class="string">'02x'</span>), <span class="number">16</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">f_function</span><span class="params">(self, r0, r1, round)</span>:</span></span><br><span class="line">        k = self.keys[round]</span><br><span class="line"></span><br><span class="line">        t0 = self.g_function(r0, k[<span class="number">0</span>], k[<span class="number">1</span>], k[<span class="number">2</span>], k[<span class="number">3</span>])</span><br><span class="line">        t1 = self.g_function(r1, k[<span class="number">4</span>], k[<span class="number">5</span>], k[<span class="number">6</span>], k[<span class="number">7</span>])</span><br><span class="line"></span><br><span class="line">        k89 = int(format(k[<span class="number">8</span>], <span class="string">'02x'</span>) + format(k[<span class="number">9</span>], <span class="string">'02x'</span>), <span class="number">16</span>)</span><br><span class="line">        kab = int(format(k[<span class="number">10</span>], <span class="string">'02x'</span>) + format(k[<span class="number">11</span>], <span class="string">'02x'</span>), <span class="number">16</span>)</span><br><span class="line">        f0 = (t0 + <span class="number">2</span> * t1 + k89) % self.const_2_16</span><br><span class="line">        f1 = (<span class="number">2</span> * t0 + t1 + kab) % self.const_2_16</span><br><span class="line">        <span class="keyword">return</span> [f0, f1]</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">round_function</span><span class="params">(self, r, round)</span>:</span></span><br><span class="line">        f = self.f_function(r[<span class="number">0</span>], r[<span class="number">1</span>], round)</span><br><span class="line"></span><br><span class="line">        new_r0 = r[<span class="number">2</span>] ^ f[<span class="number">0</span>]</span><br><span class="line">        new_r1 = r[<span class="number">3</span>] ^ f[<span class="number">1</span>]</span><br><span class="line">        new_r2 = r[<span class="number">0</span>]</span><br><span class="line">        new_r3 = r[<span class="number">1</span>]</span><br><span class="line">        <span class="keyword">return</span> [new_r0, new_r1, new_r2, new_r3]</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">encrypt</span><span class="params">(self, pt_hex)</span>:</span></span><br><span class="line">        r = self.whitening(pt_hex, self.original_key)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>, <span class="number">16</span>):</span><br><span class="line">            r = self.round_function(r, i)</span><br><span class="line"></span><br><span class="line">        y = [r[<span class="number">2</span>], r[<span class="number">3</span>], r[<span class="number">0</span>], r[<span class="number">1</span>]]</span><br><span class="line">        y_hex = <span class="string">""</span></span><br><span class="line">        <span class="keyword">for</span> yi <span class="keyword">in</span> y:</span><br><span class="line">            y_hex += format(yi, <span class="string">"04x"</span>)</span><br><span class="line"></span><br><span class="line">        c = self.whitening(y_hex, self.original_key)</span><br><span class="line">        c_str = <span class="string">""</span></span><br><span class="line">        <span class="keyword">for</span> ci <span class="keyword">in</span> c:</span><br><span class="line">            c_str += format(ci, <span class="string">"04x"</span>)</span><br><span class="line">        <span class="keyword">return</span> c_str</span><br></pre></td></tr></table></figure>
+
+<h3 id="Step-3-Decryption"><a href="#Step-3-Decryption" class="headerlink" title="Step 3: Decryption"></a>Step 3: Decryption</h3><p>The algorithm to decrypt is the same as the algorithm to encrypt except that the keys are generated and used in reverse order.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">decrypt</span><span class="params">(self, ct_hex)</span>:</span></span><br><span class="line">    r = self.whitening(ct_hex, self.original_key)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">15</span>, <span class="number">-1</span>, <span class="number">-1</span>):</span><br><span class="line">        r = self.round_function(r, i)</span><br><span class="line"></span><br><span class="line">    p = [r[<span class="number">2</span>], r[<span class="number">3</span>], r[<span class="number">0</span>], r[<span class="number">1</span>]]</span><br><span class="line">    p_hex = <span class="string">""</span></span><br><span class="line">    <span class="keyword">for</span> pi <span class="keyword">in</span> p:</span><br><span class="line">        p_hex += format(pi, <span class="string">"04x"</span>)</span><br><span class="line"></span><br><span class="line">    p = self.whitening(p_hex, self.original_key)</span><br><span class="line">    p_str = <span class="string">""</span></span><br><span class="line">    <span class="keyword">for</span> pi <span class="keyword">in</span> p:</span><br><span class="line">        p_str += format(pi, <span class="string">"04x"</span>)</span><br><span class="line">    <span class="keyword">return</span> p_str</span><br></pre></td></tr></table></figure>
+
+<h3 id="Further-Reading"><a href="#Further-Reading" class="headerlink" title="Further Reading"></a>Further Reading</h3><p>You can find the full code of my implementation <a href="https://github.com/albicant/CS485_feistel" target="_blank" rel="noopener">here</a>.</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Work</a></li>
+         
+          <li><a href="https://github.com/albicant" target="_blank" rel="noopener">Github</a></li>
+         
+          <li><a href="/gvs_resume.pdf">Resume</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Background"><span class="toc-number">1.</span> <span class="toc-text">Background</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Implementation"><span class="toc-number">2.</span> <span class="toc-text">Implementation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Step-1-Key-generation"><span class="toc-number">3.</span> <span class="toc-text">Step 1: Key generation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Step-2-Encryption"><span class="toc-number">4.</span> <span class="toc-text">Step 2: Encryption</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Step-3-Decryption"><span class="toc-number">5.</span> <span class="toc-text">Step 3: Decryption</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Further-Reading"><span class="toc-number">6.</span> <span class="toc-text">Further Reading</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=sytov.net/2020/03/21/Implementing-a-Feistel-cipher-with-Python/" target="_blank" rel="noopener"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=sytov.net/2020/03/21/Implementing-a-Feistel-cipher-with-Python/&text=Implementing a Feistel cipher with Python" target="_blank" rel="noopener"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=sytov.net/2020/03/21/Implementing-a-Feistel-cipher-with-Python/&title=Implementing a Feistel cipher with Python" target="_blank" rel="noopener"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=sytov.net/2020/03/21/Implementing-a-Feistel-cipher-with-Python/&is_video=false&description=Implementing a Feistel cipher with Python" target="_blank" rel="noopener"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Implementing a Feistel cipher with Python&body=Check out this article: sytov.net/2020/03/21/Implementing-a-Feistel-cipher-with-Python/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=sytov.net/2020/03/21/Implementing-a-Feistel-cipher-with-Python/&title=Implementing a Feistel cipher with Python" target="_blank" rel="noopener"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=sytov.net/2020/03/21/Implementing-a-Feistel-cipher-with-Python/&title=Implementing a Feistel cipher with Python" target="_blank" rel="noopener"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=sytov.net/2020/03/21/Implementing-a-Feistel-cipher-with-Python/&title=Implementing a Feistel cipher with Python" target="_blank" rel="noopener"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=sytov.net/2020/03/21/Implementing-a-Feistel-cipher-with-Python/&title=Implementing a Feistel cipher with Python" target="_blank" rel="noopener"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=sytov.net/2020/03/21/Implementing-a-Feistel-cipher-with-Python/&name=Implementing a Feistel cipher with Python&description=" target="_blank" rel="noopener"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=sytov.net/2020/03/21/Implementing-a-Feistel-cipher-with-Python/&t=Implementing a Feistel cipher with Python" target="_blank" rel="noopener"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2018-2020
+    G.V. Sytov
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Work</a></li>
+         
+          <li><a href="https://github.com/albicant" target="_blank" rel="noopener">Github</a></li>
+         
+          <li><a href="/gvs_resume.pdf">Resume</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+    <!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="/lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
