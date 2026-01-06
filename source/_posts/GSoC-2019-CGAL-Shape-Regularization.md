@@ -4,10 +4,10 @@ date: 2019-09-05 18:07:34
 tags:
 ---
 ### Project Overview
-I participated in 2019 [Google Summer of Code (GSoC)](https://summerofcode.withgoogle.com/) by creating the [Shape regularization](https://cgal.geometryfactory.com/~danston/Shape_regularization/index.html) package for the [Computational Geometry Algorithms Library (CGAL)](https://www.cgal.org/) project by implementing the Generalized Global Regularization algorithm from the article ["KIPPI: Kinetic Polygonal Partitioning of Images"](https://hal.inria.fr/hal-01740958/file/kippi.pdf) written by Jean-Philippe Bauchet and Florent Lafarge at [Inria](https://www.inria.fr/en). Development for the package for CGAL was carried out under the supervision of [Dr. Dmitry Anisimov](https://www.anisimovdmitry.com/). The package comes with classes that work on a given set of 2D segments.
+I participated in 2019 [Google Summer of Code (GSoC)](https://summerofcode.withgoogle.com/) by creating the [Shape regularization](https://doc.cgal.org/latest/Shape_regularization/index.html) package for the [Computational Geometry Algorithms Library (CGAL)](https://www.cgal.org/) project by implementing the Generalized Global Regularization algorithm from the article ["KIPPI: Kinetic Polygonal Partitioning of Images"](https://hal.inria.fr/hal-01740958/file/kippi.pdf) written by Jean-Philippe Bauchet and Florent Lafarge at [Inria](https://www.inria.fr/en). Development for the package for CGAL was carried out under the supervision of [Dr. Dmitry Anisimov](https://rudanston.wixsite.com/anisimov). The package comes with classes that work on a given set of 2D segments.
 
 ### About GSoC
-[Google Summer of Code 2019](https://summerofcode.withgoogle.com/) was a 12 week, full time, remote, paid internship with regular evaluation of the participant's work every 4 weeks. I designed, implemented, tested and documented the package under the direction of my mentor [Dr. Dmitry Anisimov](https://www.anisimovdmitry.com/). 
+[Google Summer of Code 2019](https://summerofcode.withgoogle.com/) was a 12 week, full time, remote, paid internship with regular evaluation of the participant's work every 4 weeks. I designed, implemented, tested and documented the package under the direction of my mentor [Dr. Dmitry Anisimov](https://rudanston.wixsite.com/anisimov). 
 
 
 ### Shape Regularization Overview
@@ -20,9 +20,9 @@ The algorithm works as follows:
 5. Updates items within each regularized group.
 
 If the item type is a 2D segment, the package provides a few classes to reorient and realign them:
-* [Delaunay Neighbor Query](https://cgal.geometryfactory.com/~danston/Shape_regularization/index.html#QP_Regularization_Segments_Delaunay) – finds the neighbors of each segment by constructing a [Delaunay triangulation](https://en.wikipedia.org/wiki/Delaunay_triangulation) using the [CGAL::Delaunay_triangulation_2](https://doc.cgal.org/latest/Triangulation_2/index.html#title11) class
-* [Angle Regularization](https://cgal.geometryfactory.com/~danston/Shape_regularization/index.html#QP_Regularization_Segments_Angles) – re-orients segments to preserve parallelism and orthogonality.
-* [Ordinate regularization](https://cgal.geometryfactory.com/~danston/Shape_regularization/index.html#QP_Regularization_Segments_Offset) – re-aligns segments to preserve collinearity.
+* [Delaunay Neighbor Query](https://doc.cgal.org/latest/Shape_regularization/index.html#title2) – finds the neighbors of each segment by constructing a [Delaunay triangulation](https://en.wikipedia.org/wiki/Delaunay_triangulation) using the [CGAL::Delaunay_triangulation_2](https://doc.cgal.org/latest/Triangulation_2/index.html#title11) class
+* [Angle Regularization](https://doc.cgal.org/latest/Shape_regularization/index.html#title3) – re-orients segments to preserve parallelism and orthogonality.
+* [Ordinate regularization](https://doc.cgal.org/latest/Shape_regularization/index.html#title4) – re-aligns segments to preserve collinearity.
 
 ![](/images/angle_reg.png)
 ![](/images/ordinate_reg.png)
@@ -76,4 +76,4 @@ Technologies used: [C++11](https://en.cppreference.com/w/cpp/11), [git](https://
 Concepts used: [Object-Oriented Design](https://en.wikipedia.org/wiki/Object-oriented_design), [Generic Programming](https://en.wikipedia.org/wiki/Generic_programming), [Quadratic Programming](https://en.wikipedia.org/wiki/Quadratic_programming).
 
 ### Links for Further Reading
-Feel free to take a look at my [code](https://github.com/CGAL/cgal-public-dev/tree/gsoc2019-Shape_regularization-sytov/Shape_regularization), [GSoC2019 proposal](https://summerofcode.withgoogle.com/archive/2019/projects/6276807777583104/), [final submission and commit history](https://github.com/CGAL/cgal/issues/4170), [final report](https://docs.google.com/document/d/17Wvyb1ZiP8J-myLg9d0d7_X83xvxLeOOG13WVJyYwNM/edit) and the [documentation](https://cgal.geometryfactory.com/~danston/Shape_regularization/index.html).
+Feel free to take a look at my [code](https://github.com/CGAL/cgal-public-dev/tree/gsoc2019-Shape_regularization-sytov/Shape_regularization), [GSoC2019 proposal](https://summerofcode.withgoogle.com/archive/2019/projects/6276807777583104/), [final submission and commit history](https://github.com/CGAL/cgal/issues/4170), [final report](https://docs.google.com/document/d/17Wvyb1ZiP8J-myLg9d0d7_X83xvxLeOOG13WVJyYwNM/edit) and the [documentation](https://doc.cgal.org/latest/Shape_regularization/index.html).
